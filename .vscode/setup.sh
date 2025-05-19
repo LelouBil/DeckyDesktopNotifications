@@ -49,7 +49,7 @@ if ! test -f "$CLI_INSTALLED"; then
             if [[ "$SYSTEM_ARCH" =~ "Linux" ]]; then
                 curl -L -o "$(pwd)"/cli/decky "https://github.com/SteamDeckHomebrew/cli/releases/latest/download/decky-linux-x86_64"
             fi
-            
+
             if [[ "$SYSTEM_ARCH" =~ "Darwin" ]]; then
                 curl -L -o "$(pwd)"/cli/decky "https://github.com/SteamDeckHomebrew/cli/releases/latest/download/decky-macOS-x86_64"
             fi
@@ -61,7 +61,7 @@ if ! test -f "$CLI_INSTALLED"; then
         if [[ "$SYSTEM_ARCH" =~ "arm64" ]]; then
             curl -L -o "$(pwd)"/cli/decky "https://github.com/SteamDeckHomebrew/cli/releases/latest/download/decky-macOS-aarch64"
         fi
-        
+
         chmod +x "$(pwd)"/cli/decky
         echo "Decky CLI tool is now installed and you can build plugins into easy zip files using the "Build Zip" Task in vscodium."
     fi

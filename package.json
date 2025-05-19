@@ -1,30 +1,33 @@
 {
-  "name": "decky-plugin-template",
+  "name": "decky-desktop-notifications",
   "version": "0.0.1",
-  "description": "A template to quickly create decky plugins from scratch, based on TypeScript and webpack",
+  "description": "A Decky plugin to have desktop notifications inside steam",
   "type": "module",
   "scripts": {
     "build": "rollup -c",
+    "buildzip": "./cli/decky plugin build ./",
+    "extractzip": "rm -rf '/home/deck/homebrew/plugins/decky-desktop-notifications' && unzip '/home/deck/homebrew/plugins/Decky Desktop Notifications.zip' -d /home/deck/homebrew/plugins/ && mv '/home/deck/homebrew/plugins/Decky Desktop Notifications' '/home/deck/homebrew/plugins/decky-desktop-notifications' && chmod -R 755 /home/deck/homebrew/plugins/decky-desktop-notifications/",
     "watch": "rollup -c -w",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "copyzip": "rsync -azp --chmod=D0755,F0755  out/ /home/deck/homebrew/plugins",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "full_deploy": "npm run build && npm run buildzip && npm run copyzip && npm run extractzip"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/SteamDeckHomebrew/decky-plugin-template.git"
+    "url": "git+https://github.com/LelouBil/DeckyDesktopNotifications"
   },
   "keywords": [
     "decky",
     "plugin",
-    "plugin-template",
     "steam-deck",
     "deck"
   ],
-  "author": "You <you@you.tld>",
+  "author": "LelouBil",
   "license": "BSD-3-Clause",
   "bugs": {
-    "url": "https://github.com/SteamDeckHomebrew/decky-plugin-template/issues"
+    "url": "https://github.com/LelouBil/DeckyDesktopNotifications/issues"
   },
-  "homepage": "https://github.com/SteamDeckHomebrew/decky-plugin-template#readme",
+  "homepage": "https://github.com/LelouBil/DeckyDesktopNotifications#readme",
   "devDependencies": {
     "@decky/rollup": "^1.0.1",
     "@decky/ui": "^4.7.2",
