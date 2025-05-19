@@ -62,11 +62,12 @@ class CustomService(NotificationsInterface):
         self.counter += 1
         notif_id = self.counter
         data = find_image(app_icon, hints)
+        decky.logger.info(f"image: {data}")
         await decky.emit(
             "show_notification",
             app_name,
             notif_id,
-            list(data) if data is not None else None,
+            data[0] + "," + data[1] if data is not None else "",
             summary,
             body,
             actions[0] if len(actions) > 0 else "",
@@ -90,6 +91,10 @@ class CustomService(NotificationsInterface):
 class Plugin:
     notifs: CustomService = None
     handle: DbusExportHandle = None
+    server_started = False
+
+    async def get_server_state(self):
+        return self.server_started
 
     async def notification_click(self, id: int, action: str):
         if self.notifs is None:
@@ -110,6 +115,14 @@ class Plugin:
         decky.logger.info("Exporting")
         self.handle = self.notifs.export_to_dbus("/org/freedesktop/Notifications")
         decky.logger.info("Setup finished")
+        self.server_started = True
+        await decky.emit("server_state",self.server_started)
+
+    async def stop_server(self):
+        if self.handle is not None:
+            self.handle.stop()
+        self.server_started = False
+        await decky.emit("server_state",self.server_started)
 
     # Asyncio-compatible long-running code, executed in a task when the plugin is loaded
     async def _main(self):
@@ -125,8 +138,7 @@ class Plugin:
     # completely removed
     async def _unload(self):
         decky.logger.info("Goodnight World!")
-        if self.handle is not None:
-            self.handle.stop()
+        await self.stop_server()
 
     # Function called after `_unload` during uninstall, utilize this to clean up processes and other remnants of your
     # plugin that may remain on the system
